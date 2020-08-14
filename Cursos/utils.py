@@ -4,14 +4,14 @@ import base64
 import requests
 
 token =''
-def authentication():
+def authentication(username,password):
     # ***     creaci+on de curso  ******
     url = 'https://tsgprueba.brightspacedemo.com/d2l/lp/auth/login/login.d2l'
 
     body = {
         "loginPath": "/d2l/login",
-        "userName": "admin.uno",
-        "password": "tsg123"
+        "userName": username,
+        "password": password
     }
 
     session = requests.Session()
@@ -48,10 +48,10 @@ def authentication():
     return token
 
 
-token = authentication()
+token = authentication("admin.uno","tsg123")
 
 
-print(authentication())
+#print(authentication("admin.uno","tsg123"))
 #token = authentication()
 
 from django.contrib import admin

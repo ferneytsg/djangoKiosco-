@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 
+
+router.register('usuariosLMS', UsuariosLMSViewsets)
 router.register('versiones', VersionesViewsets)
 router.register('disposotivos', DispositivosViewsets)
 router.register('clases', ClasesViewsets)

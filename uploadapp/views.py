@@ -104,6 +104,8 @@ class SubidasView(ListAPIView):
 
 
 
+
+
 """"
     def get_queryset(self):
         return super(DefaultsListView, self).get_queryset().filter(

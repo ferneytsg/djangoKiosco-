@@ -4,6 +4,10 @@ import base64
 
 
 from django.db import models
+class UserLMS(models.Model):
+    username=models.CharField(max_length=50, null=False, blank=True)
+    password=models.CharField(max_length=50, null=False, blank=True)
+    estudiante = models.OneToOneField('Cursos.Estudiantes', on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Versiones (models.Model):
@@ -34,7 +38,7 @@ class Grados(models.Model):
     nombre = models.CharField(max_length=50, null=False, blank=True)
 
 class Materias(models.Model):
-    codigo=models.CharField(max_length=200, null=False, blank=True)
+    codigo=models.CharField(max_length=200, unique=True, null=False, blank=True)
     titulo=models.CharField(max_length=200, null=False, blank=True)
     subtitulo=models.CharField(max_length=200, null=False, blank=True)
     descripcion=models.CharField(max_length=200, null=False, blank=True)

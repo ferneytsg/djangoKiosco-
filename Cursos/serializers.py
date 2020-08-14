@@ -3,6 +3,8 @@ from .models import *
 
 
 
+
+
 class VersionesSerializers(serializers.ModelSerializer):
     class Meta:
         model = Versiones
@@ -26,6 +28,15 @@ class EstudiantesSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Estudiantes
+        fields = ('__all__')
+
+
+class UserLMSSerializers(serializers.ModelSerializer):
+    estudiante = EstudiantesSerializers(read_only=True)
+    estudiante_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Estudiantes.objects.all(), source='estudiante')
+
+    class Meta:
+        model = UserLMS
         fields = ('__all__')
 
 class DispositivosSerializers(serializers.ModelSerializer):
@@ -54,6 +65,9 @@ class SubidasSerializers(serializers.ModelSerializer):
 class TareasSerializers(serializers.ModelSerializer):
     subida=SubidasSerializers(read_only=True)
     subida_id=serializers.PrimaryKeyRelatedField(write_only=True,queryset=Subidas.objects.all(),source='subida')
+    materias = MateriasSerializers(read_only=True)
+    materias_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Materias.objects.all(), source='materias')
+
     class Meta:
         model = Tareas
         fields = ('__all__')
@@ -67,6 +81,9 @@ class EvaluacionesSerializers(serializers.ModelSerializer):
         fields = ('__all__')
 
 class EntregasSerializers(serializers.ModelSerializer):
+    tarea=TareasSerializers(read_only=True)
+    tarea_id=serializers.PrimaryKeyRelatedField(write_only=True, queryset=Tareas.objects.all(), source='tareas')
+
     class Meta:
         model = Entregas
         fields = ('__all__')
