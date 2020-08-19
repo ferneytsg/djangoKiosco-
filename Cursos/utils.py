@@ -1,6 +1,8 @@
 
 import json
 import base64
+import shutil
+import os
 import requests
 
 token =''
@@ -477,5 +479,6 @@ def coursesList():
     return diccionario
 
 #print(coursesList())
+
 
 

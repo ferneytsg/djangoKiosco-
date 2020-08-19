@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es-MX" data-lang-default="es-MX" data-intl-overrides="{&quot;number&quot;:{&quot;patterns&quot;:{&quot;decimal&quot;:{&quot;negativePattern&quot;:&quot;-{number}&quot;},&quot;percent&quot;:{&quot;positivePattern&quot;:&quot;{number}%&quot;,&quot;negativePattern&quot;:&quot;-{number}%&quot;}},&quot;symbols&quot;:{&quot;decimal&quot;:&quot;.&quot;,&quot;group&quot;:&quot;,&quot;,&quot;negative&quot;:&quot;-&quot;,&quot;percent&quot;:&quot;%&quot;},&quot;groupSize&quot;:[3]},&quot;date&quot;:{&quot;hour24&quot;:true,&quot;calendar&quot;:{&quot;firstDayOfWeek&quot;:1,&quot;dayPeriods&quot;:{&quot;am&quot;:&quot;a. m.&quot;,&quot;pm&quot;:&quot;p. m.&quot;},&quot;months&quot;:{&quot;short&quot;:[&quot;ene.&quot;,&quot;feb.&quot;,&quot;mar.&quot;,&quot;abr.&quot;,&quot;may.&quot;,&quot;jun.&quot;,&quot;jul.&quot;,&quot;ago.&quot;,&quot;sep.&quot;,&quot;oct.&quot;,&quot;nov.&quot;,&quot;dic.&quot;,&quot;&quot;],&quot;long&quot;:[&quot;enero&quot;,&quot;febrero&quot;,&quot;marzo&quot;,&quot;abril&quot;,&quot;mayo&quot;,&quot;junio&quot;,&quot;julio&quot;,&quot;agosto&quot;,&quot;septiembre&quot;,&quot;octubre&quot;,&quot;noviembre&quot;,&quot;diciembre&quot;,&quot;&quot;]},&quot;days&quot;:{&quot;short&quot;:[&quot;dom.&quot;,&quot;lun.&quot;,&quot;mar.&quot;,&quot;mié.&quot;,&quot;jue.&quot;,&quot;vie.&quot;,&quot;sáb.&quot;]}},&quot;formats&quot;:{&quot;dateFormats&quot;:{&quot;short&quot;:&quot;dd/MM/yyyy&quot;},&quot;timeFormats&quot;:{&quot;short&quot;:&quot;HH:mm&quot;,&quot;medium&quot;:&quot;HH:mm&quot;,&quot;full&quot;:&quot;HH:mm ZZZ&quot;}}}}" data-timezone="{&quot;name&quot;:&quot;Colombia - Bogotá&quot;,&quot;identifier&quot;:&quot;America/Bogota&quot;}" data-app-version="20.20.8" dir="ltr" data-telemetry-endpoint="https://prd.telemetryservice.brightspace.com/api/events/" data-css-vars="{&quot;--d2l-branding-primary-color&quot;:&quot;#2d3d80&quot;}">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>No autorizado - tsgprueba</title>
+		<link rel="preconnect" href="https://s.brightspace.com/lib/bsi/20.20.8-83/" crossorigin>
+		<link rel="dns-prefetch" href="https://s.brightspace.com/lib/bsi/20.20.8-83/">
+		<link rel="preload" href="https://s.brightspace.com/lib/bsi/20.20.8-83/unbundled/bsi-unbundled.js" as="script" crossorigin="anonymous">
+		<link rel="preload" href="https://s.brightspace.com/lib/bsi/20.20.8-83/unbundled/d2l-navigation.js" as="script" crossorigin="anonymous">
+		<link rel="preload" href="https://s.brightspace.com/lib/bsi/20.20.8-83/unbundled/d2l-navigation-main-header.js" as="script" crossorigin="anonymous">
+		<link rel="preload" href="https://s.brightspace.com/lib/bsi/20.20.8-83/unbundled/d2l-navigation-link-image.js" as="script" crossorigin="anonymous">
+		<script>
+		(function(){if('PerformanceLongTaskTiming' in window) {var g = window.__tti = {e:[]};g.o = new PerformanceObserver( function( l ){ g.e = g.e.concat( l.getEntries() ) });g.o.observe({ entryTypes:['longtask']})}})();
+		(function(){try { localStorage.setItem('XSRF.Token','iuA7gdZq2CpIBpQiIA8EGgJQ3QIZHJ2c');} catch(e) {}})();
+		(function(){if(window['FontFace'] === undefined) { window.d2lFontsLoaded = true; return; }window.d2lFontsLoaded = false;Promise.all(['400','700'].map(function(w) {return new FontFace('Lato','url(https://s.brightspace.com/lib/fonts/0.5.0/assets/Lato-' + w + '.woff2) format("woff2")', {style:'normal',weight: w}).load();})).then(function() {window.d2lFontsLoaded = true;if(window['D2L'] && window.D2L['FontsLoaded']) { window.D2L.FontsLoaded(); }});})();
+		(function(){D2L = window.D2L || {};  D2L.LP = D2L.LP || {}; D2L.LP.Web = D2L.LP.Web || {}; D2L.LP.Web.UI = D2L.LP.Web.UI || {};
+D2L.LP.Web.UI.Flags = {
+    Flag: function(feature, defaultValue) {
+		const listedFlags ={"US116579-toasts":true,"US114885-no-jqueryui-onoff-widget":true,"de31558-use-standard-json":false};
+		return ( listedFlags[feature] !== undefined ) ? listedFlags[feature] : defaultValue;
+	}
+};})();
+		</script>
+		<link rel="icon" href="https://s.brightspace.com/lib/favicon/2.0.0/favicon.ico" />
+		<link rel="stylesheet" type="text/css" href="https://s.brightspace.com/lib/bsi/20.20.8-83/bsi.css" />
+		<link rel="stylesheet" type="text/css" href="https://s.brightspace.com/lib/reset-css/1.1.0/reset.css" />
+		<link rel="stylesheet" type="text/css" href="/d2l/common/css/D2L.LP.Web.Desktop.default.css?v=20.20.8.23765-31" />
+		<link rel="stylesheet" type="text/css" href="/d2l/common/css/D2L.LP.Web.Desktop.Print.default.css?v=20.20.8.23765-31" media="print" />
+		<style>
+			html { font-size:20px; }
+			.d2l_1_0_381 {width:500px;}
+			.d2l_1_1_890 {background-position:left top;}
+			.d2l_1_2_289 {padding:1em;}
+			.d2l_1_3_789 {background-image:url('https://s.brightspace.com/lib/bsi/20.20.8-83/images/tier1/alert.svg');}
+			.d2l_1_4_86 {background-position:right top;}
+			.d2l_1_5_487 {padding-right:31px;}
+			.d2l_1_6_814 {min-height:18px;}
+			.d2l_1_7_878 {background-image:url('https://s.brightspace.com/lib/bsi/20.20.8-83/images/tier1/check.svg');}
+			.d2l_1_8_712 {padding:3.4em;}
+			.d2l_1_10_450 {table-layout: Inherit;}
+			.d2l_1_11_240 {vertical-align:baseline;}
+			.d2l_1_12_249 {width:100%;}
+			.d2l_1_13_458 {table-layout: Fixed;}
+			.d2l_1_14_162 {margin-bottom:10px;}
+			.d2l_1_15_679 {float:left;}
+			.d2l_1_16_357 {background-image:url('/d2l/img/0/Error.Main.infAccessDenied.png?v=20.20.8.23765-31');background-position:0 0;background-repeat:no-repeat;width:50px;height:50px;background-size:50px 50px;}
+			.d2l_1_17_387 {margin-left:60px;}
+		</style>
+		<script>(function() {})();</script></head>
+	<body class="d2l-body d2l-typography vui-typography daylight d2l-body-unresolved">
+		<custom-style><style>html { --d2l-branding-primary-color: #2d3d80; }</style></custom-style>
+		<header><button class="d2l-skipnav" id="d2l_skipnav">pasar al contenido principal</button>
+		<div class="d2l-navigation-s-no-login d2l-navigation-s-main-no-links"><d2l-navigation><d2l-navigation-main-header><div class="d2l-navigation-header-left" slot="left"><div class="d2l-navigation-s-logo"><d2l-navigation-link-image src="/d2l/lp/navbars/6606/theme/viewimage/194/view?v=20.20.8.23765-31" text="tsgprueba"></d2l-navigation-link-image></div></div></d2l-navigation-main-header></d2l-navigation></div></header><span class="d2l-skipnav-target"></span><div class="d2l-page-message-container"><div class="d2l-page-message d2l-hidden d2l_1_0_381" id="d2l_sessionExpiryWarning"><div style="display:none;" id="d2l_sessionExpiryAlert" role="alert"><div class="d2l-container-icon d2l_1_1_890 d2l_1_2_289">
+			<div class="d2l-container-icon-inner d2l_1_3_789 d2l_1_4_86 d2l_1_5_487 d2l_1_6_814">
+				<h2 class="d2l-heading vui-heading-2">&#191;Est&#225; ah&#237; todav&#237;a?</h2>
+				<div class="d2l-textblock">Su sesi&#243;n se cerrar&#225; despu&#233;s de 180 minutos de inactividad; de esta forma le permite proteger su informaci&#243;n en caso de que se olvide el dispositivo sin haber cerrado la sesi&#243;n.<br/>
+<br/>
+<strong>Presione una tecla o haga clic en cualquier lugar para que la sesi&#243;n permanezca activa.</strong></div>
+			</div>
+		</div>
+		</div><div style="display:none;" id="d2l_sessionExpiryCheck" role="alert"><div class="d2l-container-icon d2l_1_1_890 d2l_1_2_289">
+			<div class="d2l-container-icon-inner d2l_1_7_878 d2l_1_4_86 d2l_1_5_487 d2l_1_6_814">
+				<div class="d2l_1_8_712">
+					<h2 class="d2l-heading vui-heading-2 d2l-heading-none">Bien, ah&#237; est&#225;.</h2>
+				</div>
+			</div>
+		</div>
+		</div></div>
+		</div>
+		<div class="d2l-page-bg">
+			<div>
+			</div>
+		</div>
+		<div class="d2l-page-main d2l-min-width d2l-max-width">
+			<div class="d2l-page-main-padding">
+				<div class="d2l-page-header">
+					<div class="d2l-box-layout d2l_1_10_450">
+						<div class="d2l-box d2l-box-v d2l-header-top d2l_1_11_240">
+							<div class="d2l-box-layout d2l_1_10_450">
+								<div class="d2l-box d2l-box-h d2l_1_12_249 d2l_1_11_240">
+									<div class="d2l-page-title-c"><div class="d2l-box-layout d2l_1_13_458">
+										<div class="d2l-box d2l-box-h d2l_1_12_249 d2l_1_11_240">
+											<h1 class="d2l-page-title d2l-heading bsi-set-solid vui-heading-1">No autorizado</h1>
+											<div class="d2l-clear"></div>
+										</div>
+									</div>
+									</div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="d2l-messagearea d2l_1_14_162" id="d2l_messagearea"></div><img class="d2l-image d2l_1_15_679 d2l_1_16_357" src="/d2l/img/lp/pixel.gif" alt="No autorizado" />
+				<div class="d2l_1_17_387">
+					<h2 class="d2l-heading vui-heading-2">Error: no autorizado</h2>
+					<h2 class="d2l-heading vui-heading-3">No cuenta con la autorizaci&#243;n para ver la p&#225;gina a la que intenta acceder.</h2>
+					<div class="d2l-textblock">Si cree que lleg&#243; a esta p&#225;gina por error y que deber&#237;a tener acceso al recurso al que intenta acceder, comun&#237;quese con el &#225;rea de asistencia t&#233;cnica.</div>
+				</div>
+				<div class="d2l-clear"></div>
+			</div>
+		</div>
+<script src="https://s.brightspace.com/lib/jquery/2.2.4/jquery.min.js"></script>
+		<script src="https://s.brightspace.com/lib/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script src="https://s.brightspace.com/lib/bsi/20.20.8-83/bsi.js"></script>
+		<script>
+		window.__ttiOnload = function() {ttiPolyfill.getFirstConsistentlyInteractive().then(function(tti) {if (tti) {document.dispatchEvent(new CustomEvent('d2l-performance-measure', {bubbles: true,detail: { name: 'd2l.page.tti', value: {name: 'd2l.page.tti', entryType: 'tti-polyfill', duration: tti, startTime: 0} }}));}});};
+		</script>
+		<script async="async" onload="window.__ttiOnload()" src="https://s.brightspace.com/lib/tti-polyfill/0.2.2/tti-polyfill-global.js"></script>
+		<script src="/d2l/common/js/D2L.LP.Web.Desktop.default.js?v=20.20.8.23765-31"></script>
+		<script src="/d2l/lms/content/static/scripts/d2l-error-event.js?v=20.20.8.23765-31"></script>
+		<script>
+		D2L.LP.Web.UI.Events.OnInit.AddListener( function() {
+D2L.O("__g1",0)();
+D2L.O("__g1",1)();
+D2L.O("__g1",2)();
+D2L.O("__g1",3)();
+D2L.O("__g1",4)();
+D2L.O("__g1",5)();
+D2L.O("__g1",6)();
+} );
+
+		D2L.OR={
+"__g1":{"0":"{\"_type\":\"func\",\"N\":\"D2LMathML.DesktopInit\",\"P\":[\"https:\/\/s.brightspace.com\/lib\/mathjax\/2.7.4\/MathJax.js?config=MML_HTMLorMML\",\"https:\/\/s.brightspace.com\/lib\/mathjax\/2.7.4\/MathJax.js?config=TeX-AMS-MML_HTMLorMML%2cSafe\",130]}",
+"1":"{\"_type\":\"func\",\"N\":\"D2L.LP.Web.Authentication.Xsrf.Init\",\"P\":[\"d2l_referrer\",\"iuA7gdZq2CpIBpQiIA8EGgJQ3QIZHJ2c\",-1973064226]}",
+"2":"{\"_type\":\"func\",\"N\":\"D2L.LP.ActivityBar.Init\",\"P\":[{\"_type\":\"url\",\"Url\":\"\/d2l\/activityFeed\/checkForNewAlerts\"},120,\"alert_bucket_{0}\",\"ab_status_{0}\"]}",
+"3":"{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.Common.Controls.MessageArea.Init\",\"P\":[\"d2l_messagearea\",{\"_type\":\"url\",\"Url\":\"\/d2l\/lp\/validation\/errors\"}]}",
+"4":"{\"_type\":\"func\",\"N\":\"D2L.LP.Globalization.Locale.Init\",\"P\":[0,{\"_type\":\"anon\",\"DecimalSeparator\":\".\",\"GroupSeparator\":\",\",\"NumberNegativePattern\":1,\"PercentPositivePattern\":1,\"PercentNegativePattern\":1,\"PercentSymbol\":\"%\",\"NegativeSign\":\"-\",\"NativeDigits\":[\"0\",\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\"],\"UseNativeDigits\":false,\"GroupSizes\":[3],\"IntegerRegex\":\"^([\\\\(-]*(([01234567890123456789]?[01234567890123456789]?([01234567890123456789](,[01234567890123456789][01234567890123456789][01234567890123456789])*)?))[\\\\)-]*)$|^([\\\\(-]*[01234567890123456789]+[\\\\)-]*)$\",\"DecimalRegex\":\"^([\\\\(-]*(([01234567890123456789]?[01234567890123456789]?([01234567890123456789](,[01234567890123456789][01234567890123456789][01234567890123456789])*)))(\\\\.[01234567890123456789]+)?[\\\\)-]*)$|^([\\\\(-]*[01234567890123456789]*\\\\.?[01234567890123456789]+[\\\\)-]*)$\"},{\"_type\":\"anon\",\"InputDateFormat\":\"dd\/MM\/yyyy\",\"Is24HourClock\":true,\"NativeDigits\":[\"0\",\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\"],\"UseNativeDigits\":false,\"TimeFormat\":\"HH:mm\",\"AmDesignator\":\"a. m.\",\"PmDesignator\":\"p. m.\",\"FirstDayOfWeek\":1,\"ShortMonthNames\":[\"ene.\",\"feb.\",\"mar.\",\"abr.\",\"may.\",\"jun.\",\"jul.\",\"ago.\",\"sep.\",\"oct.\",\"nov.\",\"dic.\",\"\"],\"LongMonthNames\":[\"enero\",\"febrero\",\"marzo\",\"abril\",\"mayo\",\"junio\",\"julio\",\"agosto\",\"septiembre\",\"octubre\",\"noviembre\",\"diciembre\",\"\"],\"ShortDayOfWeekNames\":[\"dom.\",\"lun.\",\"mar.\",\"mi\u00e9.\",\"jue.\",\"vie.\",\"s\u00e1b.\"]},{\"_type\":\"anon\",\"TextDirection\":1},{\"_type\":\"anon\",\"Culture\":\"es-MX\"},{\"_type\":\"anon\",\"JustNow\":\"ahora mismo\",\"OneMinuteAgo\":\"Hace 1 minuto\",\"TwoMinutesAgo\":\"Hace 2 minutos\",\"MinutesAgoMany\":\"Hace [0] minutos\",\"OneHourAgo\":\"Hace 1 hora\",\"TwoHoursAgo\":\"Hace 2 horas\",\"ManyHoursAgo\":\"Hace [0] horas\",\"YesterdayTime\":\"ayer a las [0]\",\"DayOfWeekTime\":\"[0] a [1]\",\"MonthDayTime\":\"[0] a [1]\",\"Now\":{\"_type\":\"D2L.LocalDateTime\",\"Year\":2020,\"Month\":8,\"Day\":18,\"Hour\":15,\"Minute\":33,\"Second\":44,\"Millisecond\":376}}]}",
+"5":"{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.Rpc.Initialize\",\"P\":[{\"_type\":\"url\",\"Url\":\"\/d2l\/login?target=%2fd2l%2ferror%2f403&sessionExpired=1\"},\"Error: no es posible completar su solicitud.\",{\"_type\":\"D2L.LP.Util.Dictionary\"},{\"_type\":\"D2L.LP.Util.Dictionary\",\"flash\":{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.FlashMessages.RpcReceivePayloadProvider\"},\"session\":{\"_type\":\"func\",\"N\":\"D2L.PT.Auth.SessionTimeout.RpcReceivePayloadProvider\"},\"messageArea\":{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.Common.Controls.MessageArea.RpcReceivePayloadProvider\"},\"OR\":{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.ObjectRepository.RpcReceivePayloadProvider\"},\"JS\":{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.Html.JavaScript.RpcReceiveJsPayloadProvider\"},\"CSS\":{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.Html.JavaScript.RpcReceiveCssPayloadProvider\"},\"BSI\":{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.Html.Bsi.RpcReceiveJsPayloadProvider\"},\"ariaMessages\":{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.Html.Aria.RpcReceivePayloadProvider\"}}]}",
+"6":"{\"_type\":\"func\",\"N\":\"D2L.LP.Web.UI.Desktop.Controls.InlineHelp.Init\",\"P\":[{\"_type\":\"url\",\"Url\":\"\/d2l\/lp\/inlineHelp\/6606\/help\"}]}"}
+
+};
+
+		</script>
+		<script>D2L.LP.Web.UI.Html.Bsi.Init('prod', 'https://s.brightspace.com/lib/webcomponentsjs/2.4.3/', false, 'https://s.brightspace.com/lib/regenerator-runtime/0.13.5/runtime.js', 'https://s.brightspace.com/lib/bsi/20.20.8-83/unbundled/bsi-unbundled.js', ['https://s.brightspace.com/lib/bsi/20.20.8-83/unbundled/d2l-navigation.js','https://s.brightspace.com/lib/bsi/20.20.8-83/unbundled/d2l-navigation-main-header.js','https://s.brightspace.com/lib/bsi/20.20.8-83/unbundled/d2l-navigation-link-image.js']);</script>
+	</body>
+</html>

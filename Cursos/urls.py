@@ -23,6 +23,7 @@ router.register('planeacion', PlaneacionViewsets)
 router.register('profesores', ProfesoresViewsets)
 router.register('subidas', SubidasViewsets)
 router.register('tareas', TareasViewsets)
+router.register('Sincronizacion', Sincronizacion)
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [

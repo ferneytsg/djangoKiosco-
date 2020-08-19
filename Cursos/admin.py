@@ -15,6 +15,7 @@ from .models import Ejercicios
 from .models import Clases
 from .models import Planeacion
 from .models import Tareas
+from .models import UserLMS
 
 
 admin.site.register(Versiones)
@@ -31,7 +32,7 @@ admin.site.register(Materias)
 admin.site.register(Planeacion)
 admin.site.register(Subidas)
 admin.site.register(Tareas)
-
+admin.site.register(UserLMS)
 
 
 
