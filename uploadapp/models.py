@@ -8,6 +8,8 @@ class File(models.Model):
     subida = models.ForeignKey('Cursos.Subidas', on_delete=models.CASCADE, null=True, blank=True)
     entrega = models.ForeignKey('Cursos.Entregas', on_delete=models.CASCADE, null=True, blank=True)
 
+
+
     def __str__(self):
         return self.file.name
 

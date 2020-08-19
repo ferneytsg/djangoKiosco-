@@ -428,15 +428,16 @@ class sincronizar():
 
         return local_filename
 
+
+
+
+
     def activities(self, id1, folders):
         headers = {'Authorization': 'Bearer ' + sincronizar.token}
-
-
-
         for folder in folders:
             subidas = Subidas(fecha="2020-08-12")
             subidas.save()
-            print(subidas.pk)
+            #print(subidas.pk)
 
             url = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.assignments.api.brightspace.com/' + \
                   id1 + '/folders/' + folder
@@ -459,30 +460,40 @@ class sincronizar():
             #print(name, title, instruction, date)
             #print(urlDownload)
             #print('\n')
+            versiones = Versiones.objects.all().values()
+
+            listaActividades=File.objects.filter(file=self.download_file(urlDownload, "media"))
+            if listaActividades !=0:
+                print(listaActividades)
+                print("Ya  existe")
+            else:
+                print(self.download_file(urlDownload, "media"))
+                print("No existe")
+
+
+            for j in versiones:
+                j['numero'] = j['numero'] + 0.1
+                Versiones.objects.all().update(numero=j['numero'])
+
+
+
 
             def random_with_N_digits(n):
                 range_start = 10 ** (n - 1)
                 range_end = (10 ** n) - 1
                 return randint(range_start, range_end)
 
-
-            ListaArchivos=File.objects.all().values()
-
-
-
-
             i = 1
             while i > 0:
                 codigoFile = random_with_N_digits(6)
                 ListaFiles = File.objects.filter(codigo=codigoFile)
 
-
                 if  len(ListaFiles)==0:
-
                     archivo = File(codigo=random_with_N_digits(6), subida_id=subidas.pk,
-                                   file=self.download_file(urlDownload, "media"))
+                                   file=self.download_file(urlDownload, "media")  )
                     archivo.save()
                     i=-2
+
 
 
             materias = Materias.objects.filter(codigo=id1).values()
