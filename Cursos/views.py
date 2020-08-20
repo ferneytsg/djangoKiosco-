@@ -235,7 +235,6 @@ class TareasViewsets(viewsets.ModelViewSet):
 
         serializer = TareasSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            print("ferney")
             try:
                 dispositivo = serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -401,21 +400,25 @@ class sincronizar():
 
     def subirmensaje(self):
         diccionario = []
+
+        querysetEntregas=Entregas.objects.all().values()
         querysetMaterias = Materias.objects.all().values()
         for codigo in querysetMaterias:
 
             querysetfiles = File.objects.filter(
-                entrega__tarea__materias__codigo=codigo["codigo"]).values()
-            print(codigo["codigo"])
+                entrega__tarea__materias__codigo=codigo["codigo"],entrega__upp=0).values()
+
             for data in querysetfiles:
-                print(data["file"])
                 diccionario.append({"codigoCurso": codigo["codigo"], "nombreArchivo": data["file"]})
 
-        print(diccionario)
+
+
         for datos in diccionario:
-            print(datos)
+            Entregas.objects.filter(upp=0).update(upp=1)
             createMessageCliente(
                 datos["codigoCurso"], datos['nombreArchivo'], "<p>" + datos['nombreArchivo'] + "</p>", "./media/")
+
+
 
     def download_file(self, url, folder_name):
         headers = {'Authorization': 'Bearer ' +
@@ -434,71 +437,63 @@ class sincronizar():
 
     def activities(self, id1, folders):
         headers = {'Authorization': 'Bearer ' + sincronizar.token}
+        versiones = Versiones.objects.all().values()
+
         for folder in folders:
-            subidas = Subidas(fecha="2020-08-12")
-            subidas.save()
+            queryTareas=Tareas.objects.filter(codigo=folder)
+            if len(queryTareas)==0:
+
+
+                subidas = Subidas(fecha="2020-08-12")
+                subidas.save()
             #print(subidas.pk)
 
-            url = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.assignments.api.brightspace.com/' + \
-                  id1 + '/folders/' + folder
-            r = requests.get(url, headers=headers)
-            response = r.json()
-            # print('*********')
-            # print(response)
-            urlDownload = response['entities'][2]['entities'][0]['links'][1][
-                'href']
-            urlName = response['entities'][2]['entities'][0]['links'][0][
-                'href']
-            print("URL NAME")
-            print(urlName)
-            print('********************')
-            name = response['properties']['name']
-            title = response['properties']['instructions']
-            instruction = response['properties']['instructionsText']
-            date = response['properties']['dueDate']
-            #print("Curso " + str(id1))
-            #print(name, title, instruction, date)
-            #print(urlDownload)
-            #print('\n')
-            versiones = Versiones.objects.all().values()
+                url = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.assignments.api.brightspace.com/' + \
+                    id1 + '/folders/' + folder
+                r = requests.get(url, headers=headers)
+                response = r.json()
+                # print('*********')
+                # print(response)
+                urlDownload = response['entities'][2]['entities'][0]['links'][1][
+                    'href']
+                urlName = response['entities'][2]['entities'][0]['links'][0][
+                    'href']
+                print("URL NAME")
+                print(urlName)
+                print('********************')
+                name = response['properties']['name']
+                title = response['properties']['instructions']
+                instruction = response['properties']['instructionsText']
+                date = response['properties']['dueDate']
+                #print("Curso " + str(id1))
+                #print(name, title, instruction, date)
+                #print(urlDownload)
+                #print('\n')
 
-            listaActividades=File.objects.filter(file=self.download_file(urlDownload, "media"))
-            if listaActividades !=0:
-                print(listaActividades)
-                print("Ya  existe")
-            else:
-                print(self.download_file(urlDownload, "media"))
-                print("No existe")
+                def random_with_N_digits(n):
+                    range_start = 10 ** (n - 1)
+                    range_end = (10 ** n) - 1
+                    return randint(range_start, range_end)
 
+                for j in versiones:
+                    j['numero'] = j['numero'] + 0.1
+                    Versiones.objects.all().update(numero=j['numero'])
 
-            for j in versiones:
-                j['numero'] = j['numero'] + 0.1
-                Versiones.objects.all().update(numero=j['numero'])
+                i = 1
+                while i > 0:
+                    codigoFile = random_with_N_digits(6)
+                    ListaFiles = File.objects.filter(codigo=codigoFile)
 
+                    if  len(ListaFiles)==0:
+                        archivo = File(codigo=random_with_N_digits(6), subida_id=subidas.pk,
+                                    file=self.download_file(urlDownload, "media")  )
+                        archivo.save()
+                        i=-2
 
+                materias = Materias.objects.filter(codigo=id1).values()
+                nuevaTarea = Tareas(nombre=name, subida_id=subidas.pk,materias_id=materias[0]["id"],codigo=folder)
+                nuevaTarea.save()
 
-
-            def random_with_N_digits(n):
-                range_start = 10 ** (n - 1)
-                range_end = (10 ** n) - 1
-                return randint(range_start, range_end)
-
-            i = 1
-            while i > 0:
-                codigoFile = random_with_N_digits(6)
-                ListaFiles = File.objects.filter(codigo=codigoFile)
-
-                if  len(ListaFiles)==0:
-                    archivo = File(codigo=random_with_N_digits(6), subida_id=subidas.pk,
-                                   file=self.download_file(urlDownload, "media")  )
-                    archivo.save()
-                    i=-2
-
-
-
-            materias = Materias.objects.filter(codigo=id1).values()
-            nuevaTarea = Tareas(nombre=name, subida_id=subidas.pk,materias_id=materias[0]["id"])
-            nuevaTarea.save()
 
 
 

@@ -6,7 +6,6 @@ from Cursos.models import Entregas
 
 
 class FileSerializer(serializers.ModelSerializer):
-    entrega = EntregasSerializers(read_only=True)
     entrega_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Entregas.objects.all(),
                                                        source='entrega')
 

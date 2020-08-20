@@ -240,11 +240,11 @@ def createMessageCliente(idCurso,nombreArchivo,mensaje,carpetaArchivo):
                 "url": [
                     {
                         "mediaType": tipo1,
-                        "href": link1
+                        "href": link2
                     },
                     {
                         "mediaType": tipo2,
-                        "href": link2
+                        "href": link1
                     }
                 ]
             }
