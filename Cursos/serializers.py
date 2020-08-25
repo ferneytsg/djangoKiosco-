@@ -3,23 +3,25 @@ from .models import *
 
 
 
-
-
 class VersionesSerializers(serializers.ModelSerializer):
+    
     class Meta:
         model = Versiones
         fields = ('__all__')
 
+
 class ProfesoresSerializers(serializers.ModelSerializer):
+    
     class Meta:
         model = Profesores
         fields = ('__all__')
 
+
 class GradosSerializers(serializers.ModelSerializer):
+    
     class Meta:
         model = Grados
         fields = ('__all__')
-
 
 
 class EstudiantesSerializers(serializers.ModelSerializer):
@@ -39,14 +41,15 @@ class UserLMSSerializers(serializers.ModelSerializer):
         model = UserLMS
         fields = ('__all__')
 
+
 class DispositivosSerializers(serializers.ModelSerializer):
     estudiante = EstudiantesSerializers(read_only=True)
+    
     class Meta:
-
         model = Dispositivos
         fields = ('__all__')
 
-    """  curso = GradosSerializers(read_only=True)"""
+
 class MateriasSerializers(serializers.ModelSerializer):
     curso = GradosSerializers(read_only=True)
     curso_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Grados.objects.all(), source='curso')
@@ -57,10 +60,13 @@ class MateriasSerializers(serializers.ModelSerializer):
         model = Materias
         fields = ('__all__')
 
+
 class SubidasSerializers(serializers.ModelSerializer):
+    
     class Meta:
         model = Subidas
         fields = ('__all__')
+
 
 class TareasSerializers(serializers.ModelSerializer):
     subida=SubidasSerializers(read_only=True)
@@ -71,30 +77,33 @@ class TareasSerializers(serializers.ModelSerializer):
         model = Tareas
         fields = ('__all__')
 
+
 class EvaluacionesSerializers(serializers.ModelSerializer):
     subida = SubidasSerializers(read_only=True)
     subida_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Subidas.objects.all(), source='subida')
 
     class Meta:
+        
         model = Evaluaciones
         fields = ('__all__')
 
+
 class EntregasSerializers(serializers.ModelSerializer):
+    
     class Meta:
+        
         model = Entregas
         fields = ('__all__')
-
-
 
 
 class EjerciciosSerializers(serializers.ModelSerializer):
     subida=SubidasSerializers(read_only=True)
     subida_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Subidas.objects.all(), source='subida')
 
-
     class Meta:
         model = Ejercicios
         fields = ('__all__')
+
 
 class PlaneacionesSerializers(serializers.ModelSerializer):
     class Meta:
@@ -107,6 +116,7 @@ class MaterialEstudioSerializers(serializers.ModelSerializer):
     class Meta:
         model = MaterialEstudio
         fields = ('__all__')
+
 
 class ClasesSerializers(serializers.ModelSerializer):
     class Meta:

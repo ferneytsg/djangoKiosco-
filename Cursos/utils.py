@@ -1,4 +1,3 @@
-
 import json
 import base64
 import shutil
@@ -7,7 +6,7 @@ import requests
 
 token =''
 def authentication(username,password):
-    # ***     creaci+on de curso  ******
+    
     url = 'https://tsgprueba.brightspacedemo.com/d2l/lp/auth/login/login.d2l'
 
     body = {
@@ -53,8 +52,6 @@ def authentication(username,password):
 token = authentication("admin.uno","tsg123")
 
 
-#print(authentication("admin.uno","tsg123"))
-#token = authentication()
 
 from django.contrib import admin
 
