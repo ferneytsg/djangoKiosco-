@@ -346,13 +346,16 @@ class SubidasViewsets(viewsets.ModelViewSet):
 
 
 class sincronizar():
+    
     token = ''
-    estudiante=""
+    estudiante = ''
     session = None
+    headers = None
+    
     def authentication(self,username, password,estudiante):
-        # ***     creaci+on de curso  ******
+       
+        
         url = 'https://tsgprueba.brightspacedemo.com/d2l/lp/auth/login/login.d2l'
-        sincronizar.estudiante=estudiante
         body = {
             "loginPath": "/d2l/login",
             "userName": username,
@@ -360,24 +363,27 @@ class sincronizar():
         }
 
         session = requests.Session()
+        
         sincronizar.session = session
+        sincronizar.estudiante=estudiante
+        
         r = session.post(url, data=body)
         response = r.text
 
         cookies = session.cookies.get_dict()
 
-        csrftoken = ""
+        csrf_token = ""
         counter = 0
         for data in response:
             counter += 1
             if counter >= 4214 and counter <= 4245:
-                csrftoken += data
+                csrf_token += data
 
         headers = {
             'Host': 'tsgprueba.brightspacedemo.com',
             'content-type': 'application/x-www-form-urlencoded',
             'Accept': '*/*',
-            'X-Csrf-Token': csrftoken,
+            'X-Csrf-Token': csrf_token,
         }
 
         url2 = 'https://tsgprueba.brightspacedemo.com/d2l/lp/auth/oauth2/token'
@@ -391,6 +397,7 @@ class sincronizar():
         response2 = r2.json()
 
         sincronizar.token = response2['access_token']
+        sincronizar.headers = {'Authorization': 'Bearer ' + sincronizar.token}
 
     def print(self):
         print(sincronizar.token)
@@ -398,263 +405,178 @@ class sincronizar():
         print(sincronizar.estudiante)
 
 
-    def subirmensaje(self):
-        diccionario = []
+    def createMessage(self):
 
-        querysetEntregas=Entregas.objects.all().values()
         querysetMaterias = Materias.objects.all().values()
+        
+        diccionario = []
         for codigo in querysetMaterias:
-
-            querysetfiles = File.objects.filter(
-                entrega__tarea__materias__codigo=codigo["codigo"],entrega__upp=0).values()
+    
+            querysetfiles = File.objects.filter(entrega__tarea__materias__codigo=codigo["codigo"], entrega__upp=0).values()
 
             for data in querysetfiles:
                 diccionario.append({"codigoCurso": codigo["codigo"], "nombreArchivo": data["file"]})
 
 
-
         for datos in diccionario:
             Entregas.objects.filter(upp=0).update(upp=1)
-            createMessageCliente(
-                datos["codigoCurso"], datos['nombreArchivo'], "<p>" + datos['nombreArchivo'] + "</p>", "./media/")
+            createMessageCliente(datos["codigoCurso"], datos['nombreArchivo'], "<p>" + datos['nombreArchivo'] + "</p>", "./media/")
 
 
 
     def download_file(self, url, folder_name):
-        headers = {'Authorization': 'Bearer ' +
-                                    sincronizar.token}
+    
         local_filename = url.split('/')[-1]
         local_filename = local_filename.split("?")[0]
         path = os.path.join("./{}/{}".format(folder_name, local_filename))
-        r = sincronizar.session.get(url, headers=headers, allow_redirects=True)
+        r = sincronizar.session.get(url, headers=sincronizar.headers, allow_redirects=True)
         open(path, 'wb').write(r.content)
 
         return local_filename
 
 
 
-
-
-    def activities(self, id1, folders):
-        headers = {'Authorization': 'Bearer ' + sincronizar.token}
-        versiones = Versiones.objects.all().values()
+    def download_Activities(self, id1, folders):
+        
+        versions = Versiones.objects.all().values()
 
         for folder in folders:
-            queryTareas=Tareas.objects.filter(codigo=folder)
-            if len(queryTareas)==0:
-
-
-                subidas = Subidas(fecha="2020-08-12")
+            
+            queryTareas=Tareas.objects.filter(codigo=folder) 
+            if len(queryTareas) == 0:
+            
+                subidas = Subidas(fecha="2020-08-25")
                 subidas.save()
-            #print(subidas.pk)
 
-                url = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.assignments.api.brightspace.com/' + \
-                    id1 + '/folders/' + folder
-                r = requests.get(url, headers=headers)
+                url = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.assignments.api.brightspace.com/' + id1 + '/folders/' + folder
+                r = requests.get(url, headers=sincronizar.headers)
                 response = r.json()
-                # print('*********')
-                # print(response)
-                urlDownload = response['entities'][2]['entities'][0]['links'][1][
-                    'href']
-                urlName = response['entities'][2]['entities'][0]['links'][0][
-                    'href']
-                print("URL NAME")
-                print(urlName)
-                print('********************')
-                name = response['properties']['name']
-                title = response['properties']['instructions']
-                instruction = response['properties']['instructionsText']
-                date = response['properties']['dueDate']
-                #print("Curso " + str(id1))
-                #print(name, title, instruction, date)
-                #print(urlDownload)
-                #print('\n')
+                
+                urlDownload = response['entities'][2]['entities'][0]['links'][1]['href']
+                
+                # print(response['properties']['name'], response['properties']['instructions'], response['properties']['instructionsText'], response['properties']['dueDate'])
 
+                for j in versions:
+                    j['numero'] = j['numero'] + 0.1
+                    Versiones.objects.all().update(numero=j['numero'])
+                    
+                    
                 def random_with_N_digits(n):
                     range_start = 10 ** (n - 1)
                     range_end = (10 ** n) - 1
                     return randint(range_start, range_end)
 
-                for j in versiones:
-                    j['numero'] = j['numero'] + 0.1
-                    Versiones.objects.all().update(numero=j['numero'])
-
                 i = 1
                 while i > 0:
-                    codigoFile = random_with_N_digits(6)
-                    ListaFiles = File.objects.filter(codigo=codigoFile)
+                    codeFile = random_with_N_digits(6)
+                    ListFiles = File.objects.filter(codigo=codeFile)
 
-                    if  len(ListaFiles)==0:
-                        archivo = File(codigo=random_with_N_digits(6), subida_id=subidas.pk,
-                                    file=self.download_file(urlDownload, "media")  )
-                        archivo.save()
+                    if  len(ListFiles)==0:
+                        file = File(codigo=random_with_N_digits(6), subida_id=subidas.pk, file=self.download_file(urlDownload, "media"))
+                        file.save()
                         i=-2
 
-                materias = Materias.objects.filter(codigo=id1).values()
-                nuevaTarea = Tareas(nombre=name, subida_id=subidas.pk,materias_id=materias[0]["id"],codigo=folder)
-                nuevaTarea.save()
-
-
-
+                course = Materias.objects.filter(codigo=id1).values()
+                newHomework = Tareas(nombre=response['properties']['name'], subida_id=subidas.pk, materias_id=course[0]["id"], codigo=folder)
+                newHomework.save()
 
 
 
     def getActivity(self, id1):
-        headers = {'Authorization': 'Bearer ' + sincronizar.token}
+        
         url = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.activities.api.brightspace.com/activityusages/' + id1
-        r = requests.get(url, headers=headers)
+        r = requests.get(url, headers=sincronizar.headers)
         response = r.json()
 
-        idActivities = []
+        urlsActivities = []
         try:
+            
             for data in range(len(response['entities'])):
-                idActivities.append(
-                    response['entities'][data]['links'][11]['href'])
-            identificator = ""
+                urlsActivities.append(response['entities'][data]['links'][11]['href'])
+                       
             idsFolders = []
-            for data in idActivities:
-                for i in reversed(data):
-                    if i == '/':
-                        break
-                    identificator = i + identificator
-                    if len(identificator) == 3:
-                        idsFolders.append(identificator)
-                        identificator = ""
-            # print(id1)
-            # print(idsFolders)
-            # print(idActivities)
+            for urlActivity in urlsActivities: 
+                idFolder = urlActivity.split('/')[len(urlActivity.split('/'))-1]
+                idsFolders.append(idFolder)
+
+            print("El curso "+ str(id1) +" tiene las siguientes actividades "+str(idsFolders))
         except:
             print('EL curso ' + id1 + ' no tiene actividades')
 
-        if len(idActivities) != 0:
-            self.activities(id1, idsFolders)
+        if len(urlsActivities) != 0:
+            self.download_Activities(id1, idsFolders)
+
 
     def getnewCourses(self):
-        headers = {'Authorization': 'Bearer ' +
-                   sincronizar.token}
-        # *******      Headers  ****************
+        
         url = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.organizations.api.brightspace.com/'
 
-        r = requests.get(url, headers=headers)
+        r = requests.get(url, headers=sincronizar.headers)
         response = r.json()
-        urlsCursos = []
+        
+        urlCourses = []
         for data in response["entities"]:
             if data["class"][2] == "course-offering":
-                urlsCursos.append(data["href"])
+                urlCourses.append(data["href"])
 
-        cursos = ""
-        idsCursos = []
-        for urlCursos in urlsCursos:
-            for i in reversed(urlCursos):
-                if i == '/':
-                    break
-                cursos = i + cursos
-                if len(cursos) == 4:
-                    idsCursos.append(cursos)
-                    cursos = ""
-        diccionario = []
+        idCourses = []
+        for urlCourse in urlCourses:
+            
+            idCourse = urlCourse.split('/')[len(urlCourse.split('/'))-1]
+            idCourses.append(idCourse)
+            
+        addCourses = []
         try:
-            for id2 in idsCursos:
+            
+            for id2 in idCourses:
+                
                 url2 = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.organizations.api.brightspace.com/' + id2
-                r2 = requests.get(url2, headers=headers)
+                r2 = requests.get(url2, headers=sincronizar.headers)
                 response2 = r2.json()
-                r3 = requests.get(
-                    response2["entities"][2]["href"], headers=headers)
+                
+                r3 = requests.get(response2["entities"][2]["href"], headers=sincronizar.headers)
                 responseImages = r3.json()
                 urlImages = responseImages["links"][2]["href"]
 
                 def get_as_base64(url):
                     return base64.b64encode(requests.get(url).content)
+                
                 materias = Materias.objects.filter(codigo=id2).exists()
-                x = response2["links"][0]["href"].split("/")
                 if materias is False:
-                    diccionario.append(
-                        {"id": id2, "name": response2["properties"]["name"], "images": get_as_base64(urlImages)})
+                    addCourses.append({"id": id2, "name": response2["properties"]["name"], "images": get_as_base64(urlImages)})
                 else:
                     self.getActivity(id2)
+                    
         except Exception:
             print(Exception)
-        for i in diccionario:
-            materia = Materias(
-                codigo=i["id"], titulo=i["name"], imagen=i["images"], profesor_id=1, curso_id=1)
-            materia.save()
-            self.getActivity(i["id"])
-
-
-
-
-
-
-
-def crearMateria():
-    try:
-        for i in coursesList():
-            materia = Materias(
-                codigo=i["id"], titulo=i["name"], imagen=i["images"])
-            materia.save()
-            print(materia)
-    except Exception:
-        print("Estas materias ya existen")
-
-
-def mensajes():
-    # querysetArchivos = File.objects.all().values()
-
-    materias = Materias.objects.all().values()
-    print(materias)
-
-    for curso in materias:
-        queryset = Materias.objects.filter(codigo=curso["id"]).values()
-        createAssignments(curso["codigo"], "Tarea react urgente", "<p>LLevar codigo</p>", "2020-07-29T04:59:00.000Z",
-                          "el_artde_la_guerra.pdf", "./media/")
-
-
-# mensajes()
-# crearMateria()
+            
+        for newCourse in addCourses:
+            course = Materias(codigo=newCourse["id"], titulo=newCourse["name"], imagen=newCourse["images"], profesor_id=1, curso_id=1)
+            course.save()
+            self.getActivity(newCourse["id"])
 
 
 def asignard2l():
 
-    print("Asignar d2l")
+    print("Empezando sincronizacion...")
     querysetEstudiantes = UserLMS.objects.all().values()
     for codigo in querysetEstudiantes:
         a = sincronizar()
-        a.authentication(codigo["username"],
-                         codigo["password"], codigo["estudiante_id"])
+        a.authentication(codigo["username"], codigo["password"], codigo["estudiante_id"])
         a.getnewCourses()
-        a.subirmensaje()
-        # a.print()
+        a.createMessage()
 
-
-#asignard2l()
-
-
-def asignacion(self, request, pk=None):
-    querysetArchivos = File.objects.all().values()
-
-    print(querysetArchivos)
-    for i in querysetArchivos:
-        queryset = Materias.objects.filter(codigo=pk).values()
-
-    return Response(status=status.HTTP_200_OK)
-
-
-def principal():
-    crearMateria()
-    mensajes()
-    asignard2l()
 
 
 class Sincronizacion(viewsets.ModelViewSet):
     queryset = UserLMS.objects.all()
     serializer_class = UserLMSSerializers
-    print("Hola")
+    print("Para sincronizar abre el siguiente link http://127.0.0.1:8000/api/gobernacion/cursos/Sincronizacion/sincronizacion/ \n")
 
     @action(methods=['get'], detail=False)
     def sincronizacion(self, request, pk=None):
         try:
             asignard2l()
-            print("Hola Mundo")
             return Response(status=status.HTTP_200_OK)
         except Exception:
             return Response(status=status.HTTP_404_NOT_FOUND)

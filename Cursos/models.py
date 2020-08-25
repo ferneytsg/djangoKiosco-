@@ -1,9 +1,7 @@
-from django.db import models
-import base64
 # Create your models here.
-
-
 from django.db import models
+
+
 class UserLMS(models.Model):
     username=models.CharField(max_length=50, null=False, blank=True)
     password=models.CharField(max_length=50, null=False, blank=True)
@@ -37,6 +35,7 @@ class Profesores(models.Model):
 class Grados(models.Model):
     nombre = models.CharField(max_length=50, null=False, blank=True)
 
+
 class Materias(models.Model):
     codigo=models.CharField(max_length=200, unique=True, null=False, blank=True)
     titulo=models.CharField(max_length=200, null=False, blank=True)
@@ -55,12 +54,10 @@ class Tareas(models.Model):
     subida = models.ForeignKey('Cursos.Subidas', on_delete=models.CASCADE, null=True, blank=True)
 
 
-
 class Evaluaciones(models.Model):
     nombre=models.CharField(max_length=50,null=False,blank=True)
     materias = models.ForeignKey('Cursos.Materias', on_delete=models.CASCADE, null=True, blank=True)
     subida=models.ForeignKey('Cursos.Subidas', on_delete=models.CASCADE,null=True,blank=True)
-
 
 
 class Entregas(models.Model):
@@ -74,12 +71,10 @@ class Entregas(models.Model):
 
 
 
-
 class Ejercicios(models.Model):
     nombre = models.CharField(max_length=50, null=True, blank=True)
     subida=models.ForeignKey('Cursos.Subidas', on_delete=models.CASCADE,null=True,blank=True)
     clases=models.ForeignKey('Cursos.Clases', on_delete=models.CASCADE,null=True,blank=True)
-
 
 
 class Planeacion(models.Model):
@@ -91,13 +86,11 @@ class Planeacion(models.Model):
 
 
 
-
 class MaterialEstudio(models.Model):
     nombre=models.CharField(max_length=50,null=False,blank=True)
     descripcion=models.CharField(max_length=255,null=False,blank=True)
     clases=models.ForeignKey('Cursos.Clases', on_delete=models.CASCADE,null=True,blank=True)
     blob=models.ForeignKey('uploadapp.File', on_delete=models.CASCADE,null=True,blank=True)
-
 
 
 class Clases(models.Model):
