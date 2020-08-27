@@ -476,6 +476,3 @@ def coursesList():
     return diccionario
 
 #print(coursesList())
-
-
-

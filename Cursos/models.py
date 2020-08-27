@@ -99,4 +99,4 @@ class Clases(models.Model):
 
 
 class Subidas(models.Model):
-    fecha=models.DateField()
+    fecha=models.DateTimeField()

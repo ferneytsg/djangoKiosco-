@@ -12,6 +12,9 @@ from Cursos.utils import createMessageCliente
 from Cursos.utils import createAssignments
 from uploadapp.models import File
 from uploadapp.serializers import FileSerializer
+from datetime import date
+from datetime import datetime
+import base64
 
 
 class UsuariosLMSViewsets(viewsets.ModelViewSet):
@@ -207,10 +210,6 @@ class SubidasViewsets(viewsets.ModelViewSet):
     queryset = Subidas.objects.all()
     serializer_class = SubidasSerializers
 
-# *******************************************************
-
-
-
 
 class sincronizar():
     
@@ -221,27 +220,24 @@ class sincronizar():
     
     def authentication(self,username, password,estudiante):
        
+        urlLogin = 'https://tsgprueba.brightspacedemo.com/d2l/lp/auth/login/login.d2l'
         
-        url = 'https://tsgprueba.brightspacedemo.com/d2l/lp/auth/login/login.d2l'
-        body = {
+        bodyLogin = {
             "loginPath": "/d2l/login",
             "userName": username,
             "password": password
         }
-
-        session = requests.Session()
         
-        sincronizar.session = session
-        sincronizar.estudiante=estudiante
+        sincronizar.estudiante = estudiante
+        sincronizar.session = requests.Session()
         
-        r = session.post(url, data=body)
-        response = r.text
-
-        cookies = session.cookies.get_dict()
+        rLogin = sincronizar.session.post(urlLogin, data=bodyLogin)
+        responseLogin = rLogin.text
 
         csrf_token = ""
+        
         counter = 0
-        for data in response:
+        for data in responseLogin:
             counter += 1
             if counter >= 4214 and counter <= 4245:
                 csrf_token += data
@@ -253,18 +249,16 @@ class sincronizar():
             'X-Csrf-Token': csrf_token,
         }
 
-        url2 = 'https://tsgprueba.brightspacedemo.com/d2l/lp/auth/oauth2/token'
+        urlAuth = 'https://tsgprueba.brightspacedemo.com/d2l/lp/auth/oauth2/token'
 
-        body2 = {
-            'scope': '*:*:*',
-        }
+        bodyAuth = { 'scope': '*:*:*' }
+        
+        rAuth = sincronizar.session.post(urlAuth, data=bodyAuth, headers=headers)
 
-        r2 = requests.post(url2, data=body2, headers=headers, cookies=cookies)
+        responseAuth = rAuth.json()
 
-        response2 = r2.json()
-
-        sincronizar.token = response2['access_token']
-        sincronizar.headers = {'Authorization': 'Bearer ' + sincronizar.token}
+        sincronizar.token = responseAuth['access_token']
+        sincronizar.headers = {'Authorization': 'Bearer ' + sincronizar.token }
 
 
     def createMessage(self):
@@ -305,14 +299,15 @@ class sincronizar():
             queryTareas=Tareas.objects.filter(codigo=folder) 
             if len(queryTareas) == 0:
             
-                subidas = Subidas(fecha="2020-08-25")
+
+                subidas = Subidas(fecha=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
                 subidas.save()
 
                 url = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.assignments.api.brightspace.com/' + id1 + '/folders/' + folder
                 r = requests.get(url, headers=sincronizar.headers)
                 response = r.json()
                 
-                urlDownload = response['entities'][2]['entities'][0]['links'][1]['href']
+                urlDownload = response['entities'][1]['entities'][0]['links'][1]['href']
                 
                 # print(response['properties']['name'], response['properties']['instructions'], response['properties']['instructionsText'], response['properties']['dueDate'])
 
@@ -352,7 +347,7 @@ class sincronizar():
         try:
             
             for data in range(len(response['entities'])):
-                urlsActivities.append(response['entities'][data]['links'][11]['href'])
+                urlsActivities.append(response['entities'][data]['links'][9]['href'])
                        
             idsFolders = []
             for urlActivity in urlsActivities: 
@@ -418,7 +413,7 @@ class sincronizar():
 
 def asignard2l():
 
-    print("Empezando sincronizacion...")
+    print("\nEmpezando sincronizacion...\n")
     querysetEstudiantes = UserLMS.objects.all().values()
     for codigo in querysetEstudiantes:
         a = sincronizar()
