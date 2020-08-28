@@ -5,7 +5,7 @@ import os
 import requests
 
 token =''
-def authentication(username,password):
+def authentication(username, password):
     
     url = 'https://tsgprueba.brightspacedemo.com/d2l/lp/auth/login/login.d2l'
 
@@ -476,3 +476,50 @@ def coursesList():
     return diccionario
 
 #print(coursesList())
+
+
+
+def upload_file(self, idCourse, nameFile, message, folderFile, idFolder):
+        
+        file = folderFile + nameFile 
+        
+        print('\n******************  Archivo en Base 64  *******************************')
+        print(type(base64.b64encode(open(file,'rb').read())))
+        print(base64.b64encode(open(file,'rb').read()))
+        
+        
+        print('\n******************  Archivo en bytes Hexadecimal  *******************************')
+        print(type(open(file,'rb').read()))
+        print(open(file,'rb').read())
+        
+        datos = base64.b64encode(open(file,'rb').read())
+        
+        headers = { 
+                   'Authorization': 'Bearer ' + sincronizar.token,
+                   'Content-type': 'multipart/mixed; boundary=xxBOUNDARYxx',
+                   'Content-Disposition': 'form-data; name=""; filename="angular.jpg"'
+                   }
+        
+        url = 'https://tsgprueba.brightspacedemo.com/d2l/api/le/1.34/'+idCourse+'/dropbox/folders/'+idFolder+'/submissions/mysubmissions/'
+                    
+        payload = "\
+                --xxBOUNDARYxx\r\n\
+                Content-Type: application/json\r\n\r\n\
+                    \
+                    \
+                {\"Text\":\"Here you go\", \"Html\":null}\r\n--xxBOUNDARYxx\r\n\
+                Content-Disposition: form-data; name=\"\"; filename=\"React.png\"\r\n\
+                Content-Type: image/png\r\n\r\n\
+                    \
+                {"+str(datos)+"}\r\n--xxBOUNDARYxx--"
+                
+
+        
+        r = sincronizar.session.post(url, data= payload, headers=headers)
+        
+        print('\n')
+        print(r)
+        print(r.text)
+
+        
+        # print('\n'+"headers: "+str(r.request.headers))

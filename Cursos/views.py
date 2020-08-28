@@ -9,12 +9,13 @@ from rest_framework.parsers import JSONParser, MultiPartParser
 from Cursos.utils import coursesList
 from Cursos.utils import authentication
 from Cursos.utils import createMessageCliente
-from Cursos.utils import createAssignments
+from Cursos.utils import createAssignments, upload_file
 from uploadapp.models import File
 from uploadapp.serializers import FileSerializer
 from datetime import date
 from datetime import datetime
 import base64
+from django.db.models import F
 
 
 class UsuariosLMSViewsets(viewsets.ModelViewSet):
@@ -211,6 +212,7 @@ class SubidasViewsets(viewsets.ModelViewSet):
     serializer_class = SubidasSerializers
 
 
+
 class sincronizar():
     
     token = ''
@@ -259,24 +261,72 @@ class sincronizar():
 
         sincronizar.token = responseAuth['access_token']
         sincronizar.headers = {'Authorization': 'Bearer ' + sincronizar.token }
-
-
-    def createMessage(self):
-
-        querysetMaterias = Materias.objects.all().values()
         
-        diccionario = []
-        for codigo in querysetMaterias:
     
-            querysetfiles = File.objects.filter(entrega__tarea__materias__codigo=codigo["codigo"], entrega__upp=0).values()
+    def upload_file(self, idCourse, nameFile, folderFile, idFolder):
+        
+        file = folderFile + nameFile 
+        
+        # print('\n******************  Archivo en Base 64  *******************************')
+        # print(type(base64.b64encode(open(file,'rb').read())))
+        # print(base64.b64encode(open(file,'rb').read()))
+        
+        
+        # print('\n******************  Archivo en bytes Hexadecimal  *******************************')
+        # print(type(open(file,'rb').read()))
+        # print(open(file,'rb').read())
+        
+        datos = base64.b64encode(open(file,'rb').read())
+        
+        headers = { 
+                   'Authorization': 'Bearer ' + sincronizar.token,
+                   'Content-type': 'multipart/mixed; boundary=xxBOUNDARYxx',
+                   'Content-Disposition': 'form-data; name=""; filename="angular.jpg"'
+                   }
+        
+        url = 'https://tsgprueba.brightspacedemo.com/d2l/api/le/1.34/'+idCourse+'/dropbox/folders/'+idFolder+'/submissions/mysubmissions/'
+                    
+        payload = "\
+                --xxBOUNDARYxx\r\n\
+                Content-Type: application/json\r\n\r\n\
+                    \
+                    \
+                {\"Text\":\" Entrega "+nameFile+"\", \"Html\":null}\r\n--xxBOUNDARYxx\r\n\
+                Content-Disposition: form-data; name=\"\"; filename=\""+nameFile+"\"\r\n\
+                Content-Type: image/png\r\n\r\n\
+                    \
+                {"+str(datos)+"}\r\n--xxBOUNDARYxx--"
+                
 
-            for data in querysetfiles:
-                diccionario.append({"codigoCurso": codigo["codigo"], "nombreArchivo": data["file"]})
+        
+        r = sincronizar.session.post(url, data= payload, headers=headers)
+        
+        # print('\n')
+        print('Se cargo exitosamente el archivo "'+ nameFile + '" en el folder "'+idFolder+'" del curso "'+idCourse+'"') if r.status_code == 200 else print("Error")
 
+    
+    def upload_file_to_activity(self):
+        
+        print("\nSubiendo archivos.....\n")
+        
+        activities_to_load = []
+        querysetFiles = File.objects.filter(entrega__upp=0).values('codigo').annotate( 
+                        nameFile=F('file'), idFolderActivity=F('entrega__tarea__codigo'), idCourse=F('entrega__tarea__materias__codigo'))       
+        # print(querysetFiles)
 
-        for datos in diccionario:
-            Entregas.objects.filter(upp=0).update(upp=1)
-            createMessageCliente(datos["codigoCurso"], datos['nombreArchivo'], "<p>" + datos['nombreArchivo'] + "</p>", "./media/")
+        for data in querysetFiles:
+
+            activities_to_load.append({"idCourse": data["idCourse"], "nameFile": data["nameFile"], "idFolderActivity": data["idFolderActivity"]})
+    
+
+        for activity in activities_to_load:
+            
+            Entregas.objects.filter(tarea__codigo=activity['idFolderActivity'],upp=0).update(upp=1)
+
+            # print(activity["idCourse"], activity['nameFile'], "<p>" + activity['nameFile'] + "</p>", "./media/", activity['idFolderActivity'])
+    
+            self.upload_file(activity["idCourse"], activity['nameFile'], "./media/", activity['idFolderActivity'])
+        
 
 
     def download_file(self, url, folder_name):
@@ -419,7 +469,8 @@ def asignard2l():
         a = sincronizar()
         a.authentication(codigo["username"], codigo["password"], codigo["estudiante_id"])
         a.getnewCourses()
-        a.createMessage()
+        a.upload_file_to_activity()
+        print('\n')
 
 
 
