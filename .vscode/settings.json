@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "${workspaceFolder:djangoKiosco-}/db.sqlite3",
+            "driver": "SQLite",
+            "name": "database",
+            "previewLimit": 50
+        }
+    ]
+}
