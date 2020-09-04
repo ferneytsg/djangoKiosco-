@@ -85,7 +85,7 @@ def createCourse():
 
 # Datos de entrada para crear un Curso
 #token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImQ5ZDcwY2YzLTU2NzAtNGIyMy1hNDA0LWY2MTgxZWM4OWMzYyJ9.eyJpc3MiOiJodHRwczovL2FwaS5icmlnaHRzcGFjZS5jb20vYXV0aCIsImF1ZCI6Imh0dHBzOi8vYXBpLmJyaWdodHNwYWNlLmNvbS9hdXRoL3Rva2VuIiwiZXhwIjoxNTk2NjgwODA2LCJuYmYiOjE1OTY2NzcyMDYsInN1YiI6IjIwNyIsInRlbmFudGlkIjoiZTUyOTU5N2EtZmQ4NS00YWI0LWI0ZTUtNmUzYjA5OTMyNWI0IiwiYXpwIjoibG1zOmU1Mjk1OTdhLWZkODUtNGFiNC1iNGU1LTZlM2IwOTkzMjViNCIsInNjb3BlIjoiKjoqOioiLCJqdGkiOiI1YmM1NTNkMy1lYWQ3LTQzMzUtYTQ5MS05MmQzOThmN2RjNjQifQ.MrmB51si__io_tzgtClkHlvJEMoljrwvJ4p1DVOJ2NBDTeAechqAX0mfTiByyH0EenHALJEvv1dPVwtxirEzU2LoJPOsRUcQPMJ0INQHl96i5qNGbbKELuDAj1wkY8mZrJH1u7SIJG5CzGM6WvNhP8eAWswtQ7eVdfzikzWRZeBWkE3Ru-kODPcv5W1aQi4FL0bqsYE19ta9iqh-dZJkPeSOGF5BwQ9I-yHyHm-zftae_57-VYfBRV70zZuUugozAqYrHI-ixGuP-QZlgL-eJhmgp51fTJaFtbUZXrsi_fgAShMvyy96IJJP9XNUTfBJwL-3h3YInt8iMTVeEgYyVg'
-nombreCurso = "Curso React desde python"
+nombreCurso = "Python"
 # ***********************************************
 
 # createCourse()
@@ -105,7 +105,7 @@ def deleteCourse():
 
 # Datos de entrada para crear un Curso
 #token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImQ5ZDcwY2YzLTU2NzAtNGIyMy1hNDA0LWY2MTgxZWM4OWMzYyJ9.eyJpc3MiOiJodHRwczovL2FwaS5icmlnaHRzcGFjZS5jb20vYXV0aCIsImF1ZCI6Imh0dHBzOi8vYXBpLmJyaWdodHNwYWNlLmNvbS9hdXRoL3Rva2VuIiwiZXhwIjoxNTk2NjgwODA2LCJuYmYiOjE1OTY2NzcyMDYsInN1YiI6IjIwNyIsInRlbmFudGlkIjoiZTUyOTU5N2EtZmQ4NS00YWI0LWI0ZTUtNmUzYjA5OTMyNWI0IiwiYXpwIjoibG1zOmU1Mjk1OTdhLWZkODUtNGFiNC1iNGU1LTZlM2IwOTkzMjViNCIsInNjb3BlIjoiKjoqOioiLCJqdGkiOiI1YmM1NTNkMy1lYWQ3LTQzMzUtYTQ5MS05MmQzOThmN2RjNjQifQ.MrmB51si__io_tzgtClkHlvJEMoljrwvJ4p1DVOJ2NBDTeAechqAX0mfTiByyH0EenHALJEvv1dPVwtxirEzU2LoJPOsRUcQPMJ0INQHl96i5qNGbbKELuDAj1wkY8mZrJH1u7SIJG5CzGM6WvNhP8eAWswtQ7eVdfzikzWRZeBWkE3Ru-kODPcv5W1aQi4FL0bqsYE19ta9iqh-dZJkPeSOGF5BwQ9I-yHyHm-zftae_57-VYfBRV70zZuUugozAqYrHI-ixGuP-QZlgL-eJhmgp51fTJaFtbUZXrsi_fgAShMvyy96IJJP9XNUTfBJwL-3h3YInt8iMTVeEgYyVg'
-idCursos = "6744"
+idCursos = "6764"
 # ***********************************************
 
 # deleteCourse()
