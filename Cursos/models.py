@@ -1,7 +1,6 @@
 from django.db import models
 
 
-
 class UserLMS(models.Model):
     username=models.CharField(max_length=50, null=False, blank=True)
     password=models.CharField(max_length=50, null=False, blank=True)
