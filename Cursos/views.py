@@ -31,6 +31,11 @@ class VersionesViewsets(viewsets.ModelViewSet):
     serializer_class = VersionesSerializers
 
     def create(self, request, *args, **kwargs):
+        
+        print('request', request)
+        print('args', *args)
+        print('kwargs', **kwargs)
+        
 
         serializer = VersionesSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -357,7 +362,6 @@ class sincronizar():
             
             course = Materias.objects.filter(codigo=idCourse).values()
             
-            
             if len(queryTareas) == 0:
                 
                 if len(activity["Attachments"]) == 0:
@@ -452,7 +456,7 @@ def asignard2l():
     student = UserLMS.objects.all().values('username', 'password', 'estudiante__id', 'estudiante__nombres', 'estudiante__apellidos', 'estudiante__curso__nombre')
     for dataStudent in student:
         a = sincronizar()
-        # print(dataStudent)
+        print(dataStudent)
         a.authentication(dataStudent)
         a.getnewCourses()
         a.upload_file_to_activity()
