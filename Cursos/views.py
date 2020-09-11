@@ -269,7 +269,7 @@ class sincronizar():
         sincronizar.headers = {'Authorization': 'Bearer ' + sincronizar.token }
         
     
-    def upload_file(self, activity):
+    def upload_file(self, activity, student):
         
         idCourse = activity["idCourse"]
         nameFile = activity['nameFile']
@@ -312,16 +312,19 @@ class sincronizar():
 
         
         r = sincronizar.session.post(url, data= payload, headers=headers)
+        print(r)
         print('Se cargo exitosamente el archivo "'+ nameFile + '" en la actividad "'+nameActivity+'" del curso "'+nameCourse+'"') if r.status_code == 200 else print("Error, No se cargo el archivo, revisar base de datos")
 
     
-    def upload_file_to_activity(self):
+    def upload_file_to_activity(self, student):
         
         activities_to_load = []
-        querysetFiles = File.objects.filter(entrega__upp=0).values('codigo').annotate( 
+        querysetFiles = File.objects.filter(entrega__upp=0, entrega__estudiante__id=student['estudiante__id']).values('codigo').annotate( 
                         nameFile=F('file'), idFolderActivity=F('entrega__tarea__codigo'), idCourse=F('entrega__tarea__materias__codigo'), 
                         nameCourse = F('entrega__tarea__materias__titulo'), nameActivity = F('entrega__tarea__nombre'))       
 
+        print(student)
+        print(querysetFiles)
         for data in querysetFiles:
 
             activities_to_load.append({"idCourse": data["idCourse"], "nameFile": data["nameFile"], "idFolderActivity": data["idFolderActivity"], 
@@ -330,8 +333,8 @@ class sincronizar():
         print("\nSubiendo archivos.....") if len(activities_to_load) > 0 else print("No hay archivos para cargar")
         for activity in activities_to_load:
             
-            Entregas.objects.filter(tarea__codigo=activity['idFolderActivity'],upp=0).update(upp=1)
-            self.upload_file(activity)
+            Entregas.objects.filter(tarea__codigo=activity['idFolderActivity'], estudiante_id=student['estudiante__id'], upp=0).update(upp=1)
+            self.upload_file(activity, student)
     
     
     
@@ -438,7 +441,7 @@ def asignard2l():
         a = sincronizar()
         a.authentication(dataStudent)
         a.courses_by_student(dataStudent)
-        a.upload_file_to_activity()
+        a.upload_file_to_activity(dataStudent)
         print('\n')
 
 
