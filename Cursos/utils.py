@@ -49,7 +49,7 @@ def authentication(username, password):
     return token
 
 
-token = authentication("admin.uno","tsg123")
+# token = authentication("admin.uno","tsg123")
 
 
 

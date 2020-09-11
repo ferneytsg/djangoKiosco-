@@ -31,11 +31,6 @@ class VersionesViewsets(viewsets.ModelViewSet):
     serializer_class = VersionesSerializers
 
     def create(self, request, *args, **kwargs):
-        
-        print('request', request)
-        print('args', *args)
-        print('kwargs', **kwargs)
-        
 
         serializer = VersionesSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -220,7 +215,6 @@ class SubidasViewsets(viewsets.ModelViewSet):
     serializer_class = SubidasSerializers
 
 
-
 class sincronizar():
     
     token = ''
@@ -244,13 +238,16 @@ class sincronizar():
         
         rLogin = sincronizar.session.post(urlLogin, data=bodyLogin)
         responseLogin = rLogin.text
-
+        
         csrf_token = ""
+
+        initial_position = responseLogin.find("'XSRF.Token','") + 15
+        final_position = initial_position + 31
         
         counter = 0
         for data in responseLogin:
             counter += 1
-            if counter >= 4214 and counter <= 4245:
+            if counter >= initial_position and counter <= final_position:
                 csrf_token += data
 
         headers = {
@@ -272,9 +269,15 @@ class sincronizar():
         sincronizar.headers = {'Authorization': 'Bearer ' + sincronizar.token }
         
     
-    def upload_file(self, idCourse, nameFile, folderFile, idFolder):
+    def upload_file(self, activity):
         
+        idCourse = activity["idCourse"]
+        nameFile = activity['nameFile']
+        folderFile = "./media/"
+        idFolder = activity['idFolderActivity']
         file = folderFile + nameFile 
+        nameCourse = activity['nameCourse']
+        nameActivity = activity['nameActivity']
         
         # print('\n******************  Archivo en Base 64  *******************************')
         # print(type(base64.b64encode(open(file,'rb').read())))
@@ -285,7 +288,7 @@ class sincronizar():
         # print(type(open(file,'rb').read()))
         # print(open(file,'rb').read())
         
-        datos = base64.b64encode(open(file,'rb').read())
+        datos = base64.b64encode(open(file,'rb').read()).decode()
         
         headers = { 
                    'Authorization': 'Bearer ' + sincronizar.token,
@@ -309,28 +312,26 @@ class sincronizar():
 
         
         r = sincronizar.session.post(url, data= payload, headers=headers)
-        print('Se cargo exitosamente el archivo "'+ nameFile + '" en el folder "'+idFolder+'" del curso "'+idCourse+'"') if r.status_code == 200 else print("Error")
+        print('Se cargo exitosamente el archivo "'+ nameFile + '" en la actividad "'+nameActivity+'" del curso "'+nameCourse+'"') if r.status_code == 200 else print("Error, No se cargo el archivo, revisar base de datos")
 
-    
     
     def upload_file_to_activity(self):
         
-        
         activities_to_load = []
         querysetFiles = File.objects.filter(entrega__upp=0).values('codigo').annotate( 
-                        nameFile=F('file'), idFolderActivity=F('entrega__tarea__codigo'), idCourse=F('entrega__tarea__materias__codigo'))       
+                        nameFile=F('file'), idFolderActivity=F('entrega__tarea__codigo'), idCourse=F('entrega__tarea__materias__codigo'), 
+                        nameCourse = F('entrega__tarea__materias__titulo'), nameActivity = F('entrega__tarea__nombre'))       
 
         for data in querysetFiles:
 
-            activities_to_load.append({"idCourse": data["idCourse"], "nameFile": data["nameFile"], "idFolderActivity": data["idFolderActivity"]})
+            activities_to_load.append({"idCourse": data["idCourse"], "nameFile": data["nameFile"], "idFolderActivity": data["idFolderActivity"], 
+                                       "nameCourse": data["nameCourse"], 'nameActivity': data['nameActivity']})
     
-
+        print("\nSubiendo archivos.....") if len(activities_to_load) > 0 else print("No hay archivos para cargar")
         for activity in activities_to_load:
             
-            print("\nSubiendo archivos.....\n")
             Entregas.objects.filter(tarea__codigo=activity['idFolderActivity'],upp=0).update(upp=1)
-    
-            self.upload_file(activity["idCourse"], activity['nameFile'], "./media/", activity['idFolderActivity'])
+            self.upload_file(activity)
     
     
     
@@ -347,108 +348,87 @@ class sincronizar():
         return name_file 
     
     
-    def getActivity(self, idCourse):
+    def activity_by_course(self, idCourse, student):
         
         url= 'https://tsgprueba.brightspacedemo.com/d2l/api/le/1.9/'+idCourse+'/dropbox/folders/'
         r = sincronizar.session.get(url, headers = sincronizar.headers)
         response = r.json()
- 
-        activities=[]
-        for activity in response:
-            
-            versions = Versiones.objects.all().values()
-    
-            queryTareas=Tareas.objects.filter(codigo=activity["Id"], materias__codigo=idCourse)
-            
-            course = Materias.objects.filter(codigo=idCourse).values()
-            
-            if len(queryTareas) == 0:
-                
-                if len(activity["Attachments"]) == 0:
-                    
-                    print('El curso "'+course[0]["titulo"]+'" tiene la actividad "'+activity["Name"]+'" pero esta no tiene archivos adjuntos' ) 
-                    
-                else:
-            
-                    # date = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
-                    subidas = Subidas(fecha=datetime.now().replace(tzinfo=timezone.utc).isoformat())
-                    subidas.save()
-                    
-                    urlDownload = 'https://tsgprueba.brightspacedemo.com/d2l/api/le/1.9/'+idCourse+'/dropbox/folders/'+str(activity["Id"])+'/attachments/'+str(activity["Attachments"][0]["FileId"])
-                    for j in versions:
-                        j['numero'] = j['numero'] + 0.1
-                        Versiones.objects.all().update(numero=j['numero'])
-                        
-                        
-                    def random_with_N_digits(n):
-                        range_start = 10 ** (n - 1)
-                        range_end = (10 ** n) - 1
-                        return randint(range_start, range_end)
-
-                    i = 1
-                    while i > 0:
-                        codeFile = random_with_N_digits(6)
-                        ListFiles = File.objects.filter(codigo=codeFile)
-
-                        if  len(ListFiles)==0:
-                            file = File(codigo=random_with_N_digits(6), subida_id=subidas.pk, file=self.download_file(urlDownload, activity["Attachments"][0]["FileName"], course[0]["titulo"], activity["Name"]))
-                            file.save()
-                            i=-2
-
-                    newHomework = Tareas(nombre=activity["Attachments"][0]["FileName"], subida_id=subidas.pk, materias_id=course[0]["id"], codigo=activity["Id"])
-                    newHomework.save()
-                    
-                    print('Se descargó el archivo "'+activity["Attachments"][0]["FileName"]+'" en la carpeta "'+str(activity["Name"])+'" del curso "'+course[0]["titulo"]+'"')
-
-
-    def getnewCourses(self):
         
-        url = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.organizations.api.brightspace.com/'
+        course = Materias.objects.filter(codigo=idCourse).values()
+        
+        if r.status_code == 200:
+ 
+            activities=[]
+            for activity in response:
+                
+                versions = Versiones.objects.all().values()
 
-        r = requests.get(url, headers=sincronizar.headers)
+                queryTareas=Tareas.objects.filter(codigo=activity["Id"], materias__codigo=idCourse, estudiante_id=student['estudiante__id'])
+                
+                if len(queryTareas) == 0:
+                    
+                    if len(activity["Attachments"]) == 0:
+                        
+                        print('El curso "'+course[0]["titulo"]+'" tiene la actividad "'+activity["Name"]+'" pero esta no tiene archivos adjuntos' ) 
+                        
+                    else:
+                        
+                        subidas = Subidas(fecha=datetime.now().replace(tzinfo=timezone.utc).isoformat())
+                        subidas.save()
+                        
+                        urlDownload = 'https://tsgprueba.brightspacedemo.com/d2l/api/le/1.9/'+idCourse+'/dropbox/folders/'+str(activity["Id"])+'/attachments/'+str(activity["Attachments"][0]["FileId"])
+                        for j in versions:
+                            j['numero'] = j['numero'] + 0.1
+                            Versiones.objects.all().update(numero=j['numero'])
+                            
+                            
+                        def random_with_N_digits(n):
+                            range_start = 10 ** (n - 1)
+                            range_end = (10 ** n) - 1
+                            return randint(range_start, range_end)
+
+                        i = 1
+                        while i > 0:
+                            codeFile = random_with_N_digits(6)
+                            ListFiles = File.objects.filter(codigo=codeFile)
+
+                            if  len(ListFiles)==0:
+                                file = File(codigo=random_with_N_digits(6), subida_id=subidas.pk, file=self.download_file(urlDownload, activity["Attachments"][0]["FileName"], course[0]["titulo"], activity["Name"]))
+                                file.save()
+                                i=-2
+
+                        newHomework = Tareas(nombre=activity["Attachments"][0]["FileName"], subida_id=subidas.pk, materias_id=course[0]["id"], codigo=activity["Id"], estudiante_id=student['estudiante__id'] )
+                        newHomework.save()
+                        
+                        print('Se descargó el archivo "'+activity["Attachments"][0]["FileName"]+'" en la carpeta "'+str(activity["Name"])+'" del curso "'+course[0]["titulo"]+'"')
+
+    
+    def courses_by_student(self, student):
+        
+        url = 'https://tsgprueba.brightspacedemo.com/d2l/api/lp/1.9/enrollments/myenrollments/'
+
+        r = sincronizar.session.get(url, headers=sincronizar.headers)
         response = r.json()
         
-        urlCourses = []
-        for data in response["entities"]:
-            if data["class"][2] == "course-offering":
-                urlCourses.append(data["href"])
-
-        idCourses = []
-        for urlCourse in urlCourses:
+        for data in response["Items"]:
             
-            idCourse = urlCourse.split('/')[len(urlCourse.split('/'))-1]
-            idCourses.append(idCourse)
-            
-        addCourses = []
-        try:
-             
-            for idCourse in idCourses:
+            if data["OrgUnit"]["Type"]["Id"] == 3:
                 
-                url2 = 'https://e529597a-fd85-4ab4-b4e5-6e3b099325b4.organizations.api.brightspace.com/' + idCourse
-                r2 = requests.get(url2, headers=sincronizar.headers)
-                response2 = r2.json()
+                idCourse = str(data["OrgUnit"]["Id"])
                 
-                r3 = requests.get(response2["entities"][2]["href"], headers=sincronizar.headers)
-                responseImages = r3.json()
-                urlImages = responseImages["links"][2]["href"]
+                urlImages = 'https://tsgprueba.brightspacedemo.com/d2l/api/lp/1.9/courses/'+idCourse+'/image'
 
                 def get_as_base64(url):
-                    return base64.b64encode(requests.get(url).content)
+                    return base64.b64encode(sincronizar.session.get(url).content).decode()
                 
-                materias = Materias.objects.filter(codigo=idCourse).exists()
+                materias = Materias.objects.filter(codigo=str(data["OrgUnit"]["Id"])).exists()
                 if materias is False:
-                    addCourses.append({"id": idCourse, "name": response2["properties"]["name"], "grade": response2["properties"]["code"], "images": get_as_base64(urlImages)})
-                else:
-                    self.getActivity(idCourse)
+                    add_course = Materias(codigo=str(data["OrgUnit"]["Id"]), titulo=data["OrgUnit"]["Name"], subtitulo=data["OrgUnit"]["Code"] , imagen=get_as_base64(urlImages), profesor_id=1, curso_id=1)
+                    add_course.save()
                     
-        except Exception:
-            print(Exception)
-            
-        for newCourse in addCourses:
-            course = Materias(codigo=newCourse["id"], titulo=newCourse["name"], subtitulo= newCourse["grade"] ,imagen=newCourse["images"], profesor_id=1, curso_id=1)
-            course.save()
-            self.getActivity(newCourse["id"])
-
+                self.activity_by_course(idCourse, student)
+                            
+    
 
 def asignard2l():
 
@@ -456,9 +436,8 @@ def asignard2l():
     student = UserLMS.objects.all().values('username', 'password', 'estudiante__id', 'estudiante__nombres', 'estudiante__apellidos', 'estudiante__curso__nombre')
     for dataStudent in student:
         a = sincronizar()
-        print(dataStudent)
         a.authentication(dataStudent)
-        a.getnewCourses()
+        a.courses_by_student(dataStudent)
         a.upload_file_to_activity()
         print('\n')
 

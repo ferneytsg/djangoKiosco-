@@ -47,9 +47,11 @@ class Materias(models.Model):
 
 class Tareas(models.Model):
     nombre = models.CharField(max_length=50, null=False, blank=True)
-    codigo=models.CharField(max_length=50,null=True ,blank=True)
+    codigo = models.CharField(max_length=50,null=True ,blank=True)
     materias = models.ForeignKey('Cursos.Materias', on_delete=models.CASCADE, null=False, blank=True)
     subida = models.ForeignKey('Cursos.Subidas', on_delete=models.CASCADE, null=True, blank=True)
+    estudiante= models.ForeignKey('Cursos.Estudiantes', on_delete=models.CASCADE, null=True, blank=True)
+    
 
 
 class Evaluaciones(models.Model):
